@@ -12,36 +12,36 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: rgb(44, 38, 38);
-            
+            background-color: none;
+
         }
 
-        
         .sidenavbar {
             height: 100%;
-            width:240px;
-            position: fixed;
+            width: 240px;
+            position:fixed;
             top: 0;
             left: 0;
             background-color: rgb(131, 131, 131);
            
         }
-
-
-
-        .messageBox {
-            
-            height: 92%;
+        .main{
+            height: 100%;
             margin-top: 0;
+            position: relative;
             margin-left: 240px;
-            display: block;
-            background-color: antiquewhite;
-            overflow:auto;
-            
-
+        }
+        .messageBox {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            background-color: rgb(107, 206, 160);
+            overflow: auto;
         }
 
-        .messageBox>div{
+        .messageBox>div {
             background-color: black;
             color: antiquewhite;
             padding: 1vh;
@@ -50,33 +50,30 @@
             border-radius: 15px;
             margin-top: 1vh;
             margin-left: 10px;
-            
         }
 
         #form {
-            width: 100%;
+            position: absolute;
+            bottom: 0;
             display: flex;
-            height: 50px;
+            width: 100%;
         }
 
         #form>input {
             background-color: rgb(255, 250, 185);
-            border: none; 
+            border: none;
             padding: 0 1rem;
             border-radius: 3px;
-            margin-left: 240px;
+            height: 50px;
             flex: 1;
-           
+            
         }
 
-        #form>button{
-           
+        #form>button {
             border: none;
             padding: 0 1rem;
             height: 50px;
-        }      
-        
-
+        }
     </style>
 </head>
 
@@ -87,43 +84,60 @@
             <li>ChatRoom</li>
         </ul>
     </div>
-    <div class="messageBox">
+    <div class="main">
+        <div class="messageBox">
+        </div>
+        <form id="form">
+            <input id="message" autocomplete="off" />
+            <button>send</button>
+        </form>
+
     </div>
-    <form id="form">
-        <input id="message" autocomplete="off" />
-        <button>send</button>
-    </form>
 
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
+
+
         var socket = io();
         const form = document.getElementById('form');
         const input = document.getElementById('message');
         const messageList = document.getElementById('messageList');
-       
 
-        form.addEventListener('submit',function(event){
+
+        form.addEventListener('submit', function (event) {
             event.preventDefault();
-            if(input.value){
-                socket.emit('chat',input.value);
-                input.value ='';
+            let userData = getUrlValues(window.location.search);
+            console.log(userData);
+            let obj = {
+                name: userData.username,
+                message: input.value
+            };
+
+            if (input.value) {
+                socket.emit('chat', obj);
+                input.value = '';
             }
         });
-        
-        socket.on('chat',(msg)=> {
+
+        socket.on('chat', (obj) => {
             const showMessage = document.createElement('div');
-            showMessage.innerHTML =`<span class="name">name :</span><br/>
-            <span class="chatContent">${msg}</span>`;
+            showMessage.innerHTML = `<span class="name">${obj.name}:</span><br/>
+            <span class="chatContent">${obj.message}</span>`;
             let div = document.querySelector('.messageBox');
             div.appendChild(showMessage);
             div.scrollTop = div.scrollHeight;
 
-          });
+        });
 
-        socket.on('demoMessage',(demoMessgae)=>{
-            console.log(demoMessgae);
-        })
+        function getUrlValues() {
+            let values = {};
+            let parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
+                values[key] = value;
+            });
+            return values;
+        }
+
     </script>
 </body>
 
