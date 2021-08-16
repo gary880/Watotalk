@@ -19,18 +19,20 @@
         .sidenavbar {
             height: 100%;
             width: 240px;
-            position:fixed;
+            position: fixed;
             top: 0;
             left: 0;
             background-color: rgb(131, 131, 131);
-           
+
         }
-        .main{
+
+        .main {
             height: 100%;
             margin-top: 0;
             position: relative;
             margin-left: 240px;
         }
+
         .messageBox {
             height: 100%;
             width: 100%;
@@ -66,7 +68,7 @@
             border-radius: 3px;
             height: 50px;
             flex: 1;
-            
+
         }
 
         #form>button {
@@ -97,30 +99,36 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-
-
+      
         var socket = io();
         const form = document.getElementById('form');
         const input = document.getElementById('message');
         const messageList = document.getElementById('messageList');
+        const userData = getUrlValues(window.location.search);
 
+        //basic data object
+        const obj = {
+            name: userData.username,
+            message:"",
+            room: userData.room
+        };
 
+        
+        //send room id and user to server
+        socket.emit('join',obj);
+
+        //submit message
         form.addEventListener('submit', function (event) {
             event.preventDefault();
-            let userData = getUrlValues(window.location.search);
-            console.log(userData);
-            let obj = {
-                name: userData.username,
-                message: input.value
-            };
-
             if (input.value) {
+                obj.message = input.value;
                 socket.emit('chat', obj);
                 input.value = '';
             }
         });
 
-        socket.on('chat', (obj) => {
+        //print message
+        socket.on('chat-broadcast', (obj) => {
             const showMessage = document.createElement('div');
             showMessage.innerHTML = `<span class="name">${obj.name}:</span><br/>
             <span class="chatContent">${obj.message}</span>`;
@@ -130,6 +138,8 @@
 
         });
 
+
+        //get url username and room id
         function getUrlValues() {
             let values = {};
             let parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
