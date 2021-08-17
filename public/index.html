@@ -20,10 +20,27 @@
             height: 100%;
             width: 240px;
             position: fixed;
+            
             top: 0;
             left: 0;
             background-color: rgb(131, 131, 131);
+            display: flex;
+            align-items: center;
+            flex-direction: column;
 
+        }
+        .room{
+            margin: 0;
+            margin-top: 20px;
+            background-color: white;
+            padding: 20px 100%;
+            
+
+        }
+        .roomName{  
+           padding: 240px;
+           font-size: 50px;
+           
         }
 
         .main {
@@ -82,9 +99,14 @@
 <body>
     <div class="sidenavbar">
         <span id='WatotalkMark'>Watotalk</span>
-        <ul>
-            <li>ChatRoom</li>
-        </ul>
+        <div class="room">
+            <span class="roomName"></span>
+        </div>
+        <div class="currentUsers">
+            <ul class="usersList">
+               
+            </ul>
+        </div>
     </div>
     <div class="main">
         <div class="messageBox">
@@ -105,7 +127,7 @@
         const input = document.getElementById('message');
         const messageList = document.getElementById('messageList');
         const userData = getUrlValues(window.location.search);
-
+        const usersList = document.querySelector('.usersList');
         //basic data object
         const obj = {
             name: userData.username,
@@ -127,6 +149,16 @@
             }
         });
 
+        //print current room on side navbar
+        let roomName = document.querySelector('.roomName');
+        roomName.innerHTML = '#'+obj.room;
+
+        //print usersList
+
+        socket.on('usersInRoom',(users)=>{
+            printUsersList(users);
+        });
+
         //print message
         socket.on('chat-broadcast', (obj) => {
             const showMessage = document.createElement('div');
@@ -135,7 +167,6 @@
             let div = document.querySelector('.messageBox');
             div.appendChild(showMessage);
             div.scrollTop = div.scrollHeight;
-
         });
 
 
@@ -148,6 +179,11 @@
             return values;
         }
 
+        function printUsersList(users){
+            usersList.innerHTML=`
+            ${users.map(user =>`<li>${user.name}</li>`).join('')}
+            `;
+        }
     </script>
 </body>
 

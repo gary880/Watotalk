@@ -15,7 +15,12 @@ function getCurrentUser(id) {
 
 }
 
+function getRoomUsers(roomId){
+    return users.filter(user => user.roomId  === roomId);
+}
+
 module.exports = {
     Joinroom,
-    getCurrentUser
+    getCurrentUser,
+    getRoomUsers
 };

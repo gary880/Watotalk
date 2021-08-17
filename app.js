@@ -4,7 +4,7 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const {Joinroom , getCurrentUser} = require('./user/user')
+const {Joinroom , getCurrentUser,getRoomUsers} = require('./user/user')
 const io = new Server(server);
 
 app.use(express.static('public'));
@@ -15,6 +15,9 @@ io.on('connection', (socket) => {
   socket.on('join',(obj)=>{
     const user = Joinroom(socket.id,obj.name,obj.room);
     socket.join(user.roomId);
+
+    io.to(user.roomId).emit('usersInRoom',getRoomUsers(user.roomId));
+
   });
 
   
@@ -24,7 +27,7 @@ io.on('connection', (socket) => {
   
   });
 
-  console.log('a user connected');
+   console.log('a user connected');
 });
 
 server.listen(3000, () => {
