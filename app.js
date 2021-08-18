@@ -4,7 +4,7 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const {Joinroom , getCurrentUser,getRoomUsers} = require('./user/user')
+const {Joinroom , getCurrentUser,getRoomUsers,userDisconnect} = require('./user/user')
 const io = new Server(server);
 
 app.use(express.static('public'));
@@ -15,11 +15,19 @@ io.on('connection', (socket) => {
   socket.on('join',(obj)=>{
     const user = Joinroom(socket.id,obj.name,obj.room);
     socket.join(user.roomId);
-
     io.to(user.roomId).emit('usersInRoom',getRoomUsers(user.roomId));
 
   });
 
+  socket.on('disconnect', ()=>{
+    const user =  userDisconnect(socket.id);
+    
+    if(user){
+      io.to(user.roomId).emit('disconnectMessage', user )
+      io.to(user.roomId).emit('usersInRoom',getRoomUsers(user.roomId));
+    }
+
+});
   
   socket.on('chat',(obj) => {
     const user = getCurrentUser(socket.id);
