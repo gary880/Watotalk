@@ -1,47 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./css/index.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
-        integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
-    <title>Watotalk</title>
-</head>
-
-<body>
-    <div class="sidenavbar">
-
-        <span id='WatotalkMark'>Watotalk</span>
-        <div class="room">
-            <span class="roomName"></span>
-        </div>
-        <div class="currentUsers">
-            <span style="font-family: fantasy;font-size: 30px; color:bisque;">Users in room</span>
-            <ul class="usersList">
-            </ul>
-        </div>
-        <a style="margin-top: auto;" href="https://github.com/gary880"><i class="fab fa-github-square" style="font-size: 40px; color: white;"></i>
-        </a>
-    </div>
-    <div class="main">
-        <div class="messageBox">
-        </div>
-        <form id="form">
-            <input id="message" autocomplete="off" />
-            <button>send</button>
-        </form>
-
-    </div>
-
-
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="./javascript/index.js"></script>
-    <!-- <script>
-
-        var socket = io();
+var socket = io();
         const form = document.getElementById('form');
         const input = document.getElementById('message');
         const messageList = document.getElementById('messageList');
@@ -79,7 +36,7 @@
         //print message
         socket.on('chat-broadcast', (obj) => {
             const showMessage = document.createElement('div');
-            showMessage.innerHTML = `<span class="name">${obj.name}:</span><br/>
+            showMessage.innerHTML = `<span class="name">${obj.name}  :</span>
             <span class="chatContent">${obj.message}</span>`;
             let div = document.querySelector('.messageBox');
             div.appendChild(showMessage);
@@ -90,7 +47,7 @@
         socket.on('disconnectMessage', (user) => {
             const showMessage = document.createElement('div');
             //print user leave message
-            showMessage.innerHTML = `<span class="name">system :</span><br/>
+            showMessage.innerHTML = `<span class="name">system :</span>
             <span class="chatContent">${user.name} has disconnected </span>`;
             let div = document.querySelector('.messageBox');
             div.appendChild(showMessage);
@@ -111,7 +68,3 @@
             ${users.map(user => `<li>${user.name}</li>`).join('')}
             `;
         }
-    </script> -->
-</body>
-
-</html>

@@ -1,6 +1,6 @@
 const users = [];
 
-
+//把user的obj丟進users
 function Joinroom(id, name, roomId) {
 
     const user = { id, name, roomId };

@@ -1,0 +1,57 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: bisque;
+}
+
+form {
+    margin: 0;
+    padding: 0;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    width: 768px;
+    max-width: 100%;
+    min-height: 480px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 30px;
+    box-shadow: 3px 3px 9px rgb(112, 112, 112);
+}
+
+input {
+    background-color: bisque;
+    border: none;
+    padding: 15px 15px;
+    margin: 15px 0;
+    width: 60%;
+    border-radius: 15px;
+}
+
+button {
+    margin-top: 10px;
+    border: none;
+    border-radius: 15px;
+    padding: 12px 45px;
+    font-family: fantasy;
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(104, 86, 64);
+}
+
+#Watotalk {
+    font-family: fantasy;
+    font-size: 50px;
+    color: rgb(255, 213, 162);
+}
+
+input:focus {
+    outline: none;
+}

@@ -11,14 +11,16 @@ app.use(express.static('public'));
 app.use(express.static('user'));
 
 
+
 io.on('connection', (socket) => {
+  //user join chatroom
   socket.on('join',(obj)=>{
     const user = Joinroom(socket.id,obj.name,obj.room);
     socket.join(user.roomId);
     io.to(user.roomId).emit('usersInRoom',getRoomUsers(user.roomId));
-
   });
 
+  //user leave chatroom
   socket.on('disconnect', ()=>{
     const user =  userDisconnect(socket.id);
     
@@ -26,9 +28,9 @@ io.on('connection', (socket) => {
       io.to(user.roomId).emit('disconnectMessage', user )
       io.to(user.roomId).emit('usersInRoom',getRoomUsers(user.roomId));
     }
-
 });
   
+
   socket.on('chat',(obj) => {
     const user = getCurrentUser(socket.id);
     io.to(user.roomId).emit('chat-broadcast',obj);
