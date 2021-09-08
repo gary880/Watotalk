@@ -6,8 +6,9 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const {Joinroom , getCurrentUser,getRoomUsers,userDisconnect} = require('./user/user')
 const io = new Server(server);
+const port = process.env.PORT || 3000;
 
-app.use(express.static('public'));
+app.use(express.static('public',{index : 'Login.html'}));
 app.use(express.static('user'));
 
 
@@ -40,7 +41,7 @@ io.on('connection', (socket) => {
    console.log('a user connected');
 });
 
-server.listen(3000, () => {
+server.listen(port, () => {
   console.log('listening on *:3000');
 });
 
